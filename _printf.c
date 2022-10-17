@@ -16,8 +16,10 @@ int (*get_op(const char c))(va_list)
 		{"c", print_char},
 		{"s", print_str};
 		{"%", print_percent}
+		{"i", print_nbr}
+		{"d", print_nbr{
 	};
-	while (i < 3)
+	while (i < 14)
 	{
 		if (c == fp[i].c[0])
 		{
