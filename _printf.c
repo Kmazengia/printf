@@ -17,7 +17,7 @@ int (*get_op(const char c))(va_list)
 		{"s", print_str};
 		{"%", print_percent}
 		{"i", print_nbr}
-		{"d", print_nbr{
+		{"d", print_nbr}
 	};
 	while (i < 14)
 	{
