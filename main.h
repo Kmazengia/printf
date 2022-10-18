@@ -1,42 +1,40 @@
-#ifndef PRINTF_H
-#define PRINTF_H
+#ifndef _MAIN_H_
+#define _MAIN_H_
+#define INT_BITS (4 * 8)
+
 #include <stdarg.h>
-int _putchar(char c);
-int _printf(const char *format, ...);
-int print_char(va_list ap);
-int print_str(va_list ap);
-int print_nbr(va_list ap);
-int print_binary(va_list ap);
-int print_octal(va_list ap);
-int print_hexa_lower(va_list ap);
-int print_hexa_upper(va_list ap);
-int print_unsigned(va_list ap);
-int print_str_unprintable(va_list ap);
-int print_str_reverse(va_list ap);
-int print_ptr(va_list ap);
-int print_rot13(va_list ap);
-int print_percent(va_list ap __attribute__((unused)));
-int print_number(int n);
-int print_unsigned_number(unsigned int n);
-int _putchar(char c);
-int _puts(char *str, int ascii);
-int _nbr_len(int prmNumber);
-int _strlen_recursion(char *s);
-int convert_alpha_numeric(int nb, int upper);
-char *convert_rot13(char *str);
-char *convert_base(unsigned long nb, unsigned int base, int upper);
-char *_strdup(char *str);
-char *convert_base_pointer(unsigned long p);
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <limits.h>
 
 /**
- * struct flags_printf - struct conversion to function
- * @c: flag string
- * @f: pointer to func
+ * struct call - struct call
+ * @t: t - flag for data type
+ * @f: function - assocated function
+ *
  */
-
-typedef struct flags_printf
+typedef struct call
 {
-	char *c;
-	int (*f)(va_list);
-} flags_p;
+	char t;
+	int (*f)(char *, va_list, int);
+} call_t;
+
+int _printf(const char *format, ...);
+int buff_append(char *buff_dest, va_list arg, int buff_count, char type);
+int print_buff(char *buff, unsigned int nbuff);
+int str_len(char *s);
+char *_strcpy(char *dest, char *src);
+int parse_char(char *buff_dest, va_list arg, int buff_count);
+int parse_str(char *buff_dest, va_list arg, int buff_count);
+int parse_int(char *buff_dest, va_list list, int buff_count);
+int parse_perc(char *buff_dest, va_list arg, int buff_count);
+int parse_bin(char *buff_dest, va_list arg, int buff_count);
+int parse_oct(char *buff_dest, va_list arg, int buff_count);
+int parse_hex(char *buff_dest, va_list arg, int buff_count);
+int parse_X(char *buff_dest, va_list arg, int buff_count);
+int parse_uint(char *buff_dest, va_list arg, int buff_count);
+int parse_rev(char *buff_dest, va_list arg, int buff_count);
+int parse_R13(char *buff_dest, va_list arg, int buff_count);
+
 #endif

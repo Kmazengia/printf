@@ -1,77 +1,51 @@
-#include <stdarg.h>
 #include "main.h"
-#include <stddef.h>
 
 /**
- * get_op - select function for conversion char
- * @c: char to check
- * Return: pointer to function
- */
-
-int (*get_op(const char c))(va_list)
-{
-	int i = 0;
-
-	flags_p fp[] = {
-		{"c", print_char},
-		{"s", print_str};
-		{"%", print_percent}
-		{"i", print_nbr}
-		{"d", print_nbr}
-	};
-	while (i < 14)
-	{
-		if (c == fp[i].c[0])
-		{
-			return (fp[i].f);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-/**
- * _printf - Reproduce behavior of printf function
- * @format: format string
- * Return: value of printed chars
+ * _printf - formatted output conversion and print data.
+ * @format: input string.
+ *
+ * Return: number of chars printed.
  */
 
 int _printf(const char *format, ...)
 {
-	va_list ap;
-	int sum = 0, i = 0;
-	int (*func)();
+	int i = 0, j = 0, buff_count = 0, prev_buff_count = 0;
+	char buffer[2000];
+	va_list arg;
+	call_t container[] = {
+		{'c', parse_char}, {'s', parse_str}, {'i', parse_int}, {'d', parse_int},
+		{'%', parse_perc}, {'b', parse_bin}, {'o', parse_oct}, {'x', parse_hex},
+		{'X', parse_X}, {'u', parse_uint}, {'R', parse_R13}, {'r', parse_rev},
+		{'\0', NULL}
+	};
 
-	if (!format || (format[0] == '%' && format[1] == '\0'))
+	if (!format)
 		return (-1);
-	va_start(ap, format);
-
-	while (format[i])
+	va_start(arg, format);
+	while (format && format[i] != '\0')
 	{
 		if (format[i] == '%')
 		{
-			if (format[i + 1] != '\0')
-				func = get_op(format[i + 1]);
-			if (func == NULL)
+			i++, prev_buff_count = buff_count;
+			for (j = 0; container[j].t != '\0'; j++)
 			{
-				_putchar(format[i]);
-				sum++;
-				i++;
+				if (format[i] == '\0')
+					break;
+				if (format[i] == container[j].t)
+				{
+					buff_count = container[j].f(buffer, arg, buff_count);
+					break;
+				}
 			}
-			else
-			{
-				sum += func(ap);
-				i += 2;
-				continue;
-			}
+			if (buff_count == prev_buff_count && format[i])
+				i--, buffer[buff_count] = format[i], buff_count++;
 		}
 		else
-		{
-			_putchar(format[i]);
-			sum++;
-			i++;
-		}
+			buffer[buff_count] = format[i], buff_count++;
+		i++;
 	}
-	va_end(ap);
-	return (sum);
+	va_end(arg);
+	buffer[buff_count] = '\0';
+	print_buff(buffer, buff_count);
+	return (buff_count);
 }
