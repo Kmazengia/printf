@@ -202,7 +202,7 @@ int write_unsgnd(int is_negative, int ind,
  * @length: Length of number
  * @width: Wwidth specifier
  * @flags: Flags specifier
- * @padd: Char representing the padding
+ * @padd: Char representing the padd
  * @extra_c: Char representing extra char
  * @padd_start: Index at which padding should start
  *
